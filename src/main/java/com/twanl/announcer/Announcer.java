@@ -1,6 +1,7 @@
 package com.twanl.announcer;
 
 import com.twanl.announcer.commands.Commands;
+import com.twanl.announcer.events.JoinEvent;
 import com.twanl.announcer.utils.Strings;
 import com.twanl.announcer.utils.UpdateChecker;
 import org.bukkit.Bukkit;
@@ -25,27 +26,27 @@ public class Announcer extends JavaPlugin {
 
     public void onEnable() {
 
-        /*
+
         this.checker = new UpdateChecker(this);
         if (this.checker.isConnected()) {
             if (this.checker.hasUpdate()) {
                 getServer().getConsoleSender().sendMessage(Strings.green + "");
                 getServer().getConsoleSender().sendMessage(Strings.green + "------------------------");
-                getServer().getConsoleSender().sendMessage(Strings.red + "PlayerCount is outdated!");
+                getServer().getConsoleSender().sendMessage(Strings.red + "Announcer is outdated!");
                 getServer().getConsoleSender().sendMessage(Strings.white + "Newest version: " + this.checker.getLatestVersion());
                 getServer().getConsoleSender().sendMessage(Strings.white + "Your version: " + Strings.green + this.getDescription().getVersion());
-                getServer().getConsoleSender().sendMessage("Please download the new version at https://www.spigotmc.org/resources/playercount.52758/download?version=208548");
+                getServer().getConsoleSender().sendMessage("Please download the new version at https://www.spigotmc.org/resources/announcer.53787/");
                 getServer().getConsoleSender().sendMessage(Strings.green + "------------------------");
                 getServer().getConsoleSender().sendMessage(Strings.green + "");
             } else {
                 getServer().getConsoleSender().sendMessage(Strings.green + "");
                 getServer().getConsoleSender().sendMessage(Strings.green + "---------------------------------");
-                getServer().getConsoleSender().sendMessage(Strings.green + "PlayerCount is up to date.");
+                getServer().getConsoleSender().sendMessage(Strings.green + "Announcer is up to date.");
                 getServer().getConsoleSender().sendMessage(Strings.green + "---------------------------------");
                 getServer().getConsoleSender().sendMessage(Strings.green + "");
             }
         }
-        */
+
 
 
         LOAD();
@@ -60,7 +61,7 @@ public class Announcer extends JavaPlugin {
 
     public void LOAD() {
         // Register listeners
-        //getServer().getPluginManager().registerEvents(new EventsClass(), this);
+        getServer().getPluginManager().registerEvents(new JoinEvent(), this);
 
         // Register commands
         Commands commands = new Commands();
