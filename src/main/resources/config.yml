@@ -1,6 +1,20 @@
+#
+#       Announcer
+#       Created by Twam L
+#
 update_message: true
+
+# Set here how many seconds you can broadcast the message, if you want every 5 minuts a message > 5 * 60 = 300 (Seconds)
+timer: 300
+
+# Set here you broadcast message, if you want to use color codes the text must be serounded with ''
 text:
 - '&aThis'
 - '&7is'
 - '&ea'
 - '&6message'
+
+
+# Set here you world whice not be broadcast it.
+disabled_worlds:
+- example_world

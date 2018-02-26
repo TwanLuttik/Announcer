@@ -1,6 +1,7 @@
 package com.twanl.announcer.commands;
 
 import com.twanl.announcer.Announcer;
+import com.twanl.announcer.utils.ConfigManager;
 import com.twanl.announcer.utils.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,7 +15,7 @@ import java.util.List;
 public class Commands implements CommandExecutor{
 
     private Announcer plugin = Announcer.getPlugin(Announcer.class);
-
+    public ConfigManager cfgM;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -39,10 +40,11 @@ public class Commands implements CommandExecutor{
                 }
             } else if (args[0].equalsIgnoreCase("reload")) {
                 if (p.hasPermission("announcer.reload")) {
+
                     plugin.saveDefaultConfig();
                     plugin.reloadConfig();
-                    plugin.getServer().getConsoleSender().sendMessage(Strings.logName + Strings.green + "Config File Reloaded Succsesfully!");
                     p.sendMessage(Strings.goldI + "Config File Reloaded Succsesfully!");
+                    p.sendMessage(Strings.whiteI + "the broadcast TIME will not change, you have to restart the server! " + Strings.redI + "(will be added in the next version)");
 
                 } else {
                     p.sendMessage(Strings.noPerm);

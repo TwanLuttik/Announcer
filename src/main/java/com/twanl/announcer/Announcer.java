@@ -1,16 +1,20 @@
 package com.twanl.announcer;
 
 import com.twanl.announcer.commands.Commands;
+import com.twanl.announcer.events.BroadcastEvent;
 import com.twanl.announcer.events.JoinEvent;
 import com.twanl.announcer.utils.Strings;
 import com.twanl.announcer.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Announcer extends JavaPlugin {
@@ -23,9 +27,14 @@ public class Announcer extends JavaPlugin {
     private final String PluginVersionOn = ChatColor.GREEN + "(" + pdfFile.getVersion() + ")";
     private final String PluginVersionOff = ChatColor.RED + "(" + pdfFile.getVersion() + ")";
 
+    int time = getConfig().getInt("timer");
+    int convert_time = time * 20;
+
 
     public void onEnable() {
 
+
+        BukkitTask TaskName = new BroadcastEvent(this).runTaskTimer(this, 20, convert_time);
 
         this.checker = new UpdateChecker(this);
         if (this.checker.isConnected()) {
@@ -48,9 +57,8 @@ public class Announcer extends JavaPlugin {
         }
 
 
-
         LOAD();
-        message();
+        //message();
         Bukkit.getConsoleSender().sendMessage(Strings.logName + "Has been enabled " + PluginVersionOn);
     }
 
@@ -69,33 +77,43 @@ public class Announcer extends JavaPlugin {
 
 
         //LoadConfig
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        //getConfig().options().copyDefaults(true);
+        saveDefaultConfig();
+
+        //saveConfig();
     }
 
 
 
 
     public void message() {
-        this.config = getConfig();
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask((Plugin) this, new Runnable() {
+
+        int ticks = (int) getConfig().get("timer");
+        int seconds = ticks / 20;
+
+        int a1 = ticks * 20;
 
 
-
+        BukkitScheduler scheduler = getServer().getScheduler();
+        scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
             public void run() {
 
-                List<String> list = getConfig().getStringList("text");
-                String listString = String.join(""+ Strings.reset + "\n", list);
+                List<String> worlds = new ArrayList<String>();
+                worlds = getConfig().getStringList("disabled_worlds");
 
-                Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&',"" + listString));
+                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                    if (!worlds.contains(p.getWorld().getName())) {
+                        List<String> list = getConfig().getStringList("text");
+                        String listString = String.join("" + Strings.reset + "\n", list);
 
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', "" + listString));
+                    }
+                }
 
 
             }
-        }, 20L, 8000L);
+        }, 0L, a1);
+
+
     }
-
-
-
-
 }
